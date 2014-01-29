@@ -1,0 +1,290 @@
+/* original by @DiegoAlvarezA */
+
+.altShift #main-toolbar { 
+    background:#3c3f41;
+}
+
+.altShift #sidebar #working-set-header , 
+.altShift #sidebar #project-files-header,
+.altShift #sidebar #project-files-header #project-dropdown-toggle { 
+    color:#fff;    
+    font-weight:bold;
+    background-color:grey;
+}
+ 
+.altShift #sidebar #working-set-header , 
+.altShift #sidebar #open-files-container ul li.selected a ,
+.altShift #sidebar a.jstree-clicked ,
+.altShift #sidebar #open-files-container ul li a:hover,
+.altShift #sidebar #project-files-header,
+.altShift #sidebar #project-files-header #project-dropdown-toggle { 
+    color:#fff;    
+    font-weight:bold;
+
+}
+
+.altShift #sidebar #open-files-container {
+    color:#fff;
+}
+
+ 
+.altShift #sidebar #open-files-container ul li a span.extension,
+.altShift #sidebar #project-files-container ul li a span.extension {
+    color:#fce8b1;
+    font-weight:bold;
+}
+                        
+
+.altShift #sidebar #project-files-container ul li a {
+    color:#fff;
+    -webkit-transition:all 0.1s ease-in-out; 
+} 
+
+.altShift #sidebar #project-files-container ul .jstree-open > a {
+   font-weight:bold;
+} 
+.altShift #sidebar #project-files-container ul .jstree-open > a,
+.altShift #sidebar #project-files-container ul .jstree-closed > a {
+   font-size:13.5px;
+} 
+
+.altShift #sidebar #project-files-container ul li a.jstree-hovered {   
+    color:#f8cb4f;
+    -webkit-transform:translateX(5px);
+} 
+
+              
+    .CodeMirror:not(.cm-s-default) .CodeMirror-activeline-background {
+        outline: 1px solid #414141;
+    }
+    .cm-s-altShift.CodeMirror{ 
+        background:#242424;
+        color:#fff;    
+    } 
+    
+    .cm-s-altShift .CodeMirror-gutters {
+        background-color: #242424;
+        border-right:0;
+    }
+
+
+     .cm-s-altShift .CodeMirror-hscrollbar{                
+        bottom: 2px;
+        border-color: #202020;                   
+    } 
+     
+     .cm-s-altShift .CodeMirror-vscrollbar{                
+        right: 2px;
+        border-color: #202020;                   
+    }
+            
+    .cm-s-altShift .CodeMirror-hscrollbar::-webkit-scrollbar {
+        height: 10px;
+    }
+    
+    .cm-s-altShift .CodeMirror-vscrollbar::-webkit-scrollbar {
+        width: 10px;
+    }
+    .cm-s-altShift .CodeMirror-vscrollbar::-webkit-scrollbar-track , 
+    .cm-s-altShift .CodeMirror-hscrollbar::-webkit-scrollbar-track   {
+        background: transparent;
+    }
+    .cm-s-altShift .CodeMirror-vscrollbar::-webkit-scrollbar-thumb , 
+    .cm-s-altShift .CodeMirror-hscrollbar::-webkit-scrollbar-thumb  {
+        background: #3c3f41;
+        
+    }
+    .cm-s-altShift .CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover ,  
+    .cm-s-altShift .CodeMirror-hscrollbar::-webkit-scrollbar-thumb:hover {
+        background: #eb8234;
+    }
+    .cm-s-altShift .CodeMirror-vscrollbar::-webkit-scrollbar-thumb:active , 
+    .cm-s-altShift .CodeMirror-hscrollbar::-webkit-scrollbar-thumb:active{
+        background: #4bd278;
+    }
+    
+    .cm-s-altShift .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
+        background-color: transparent;
+    }
+    
+
+.cm-s-altShift .cm-keyword     {color: #white; font-weight: bold;}
+.cm-s-altShift .cm-number      {color: #ffd35c;}
+.cm-s-altShift .cm-variable    {
+	color: #79ABFF; border-radius: 5px;
+	background-color: rgba(139, 139, 139, 0.28);
+	padding-left: 1px;
+	padding-right: 1px
+}
+.cm-s-altShift .cm-variable-2  {color: #79ABFF;}
+.cm-s-altShift .cm-variable-3  {color: #79ABFF;}
+.cm-s-altShift .cm-property    {color: #D8D8D8;}
+.cm-s-altShift .cm-operator    {color: #f7c741;}
+.cm-s-altShift .cm-atom        {color: white;}
+.cm-s-altShift .cm-comment     {color: #CCDF32; background: rgba(153, 153, 153, 0.1);}
+.cm-s-altShift .cm-string      {color: #FFC600;}
+.cm-s-altShift .cm-string-2    {color: #FFC600;}
+.cm-s-altShift .cm-def         {color: #b2cfff;}
+.cm-s-altShift .cm-meta        {color: #f8cb4f;}
+.cm-s-altShift .cm-number        {color: white;}
+.cm-s-altShift .cm-qualifier   {color: white;}
+.cm-s-altShift .cm-tag 		  {color: #eb8234;}
+.cm-s-altShift .cm-builtin     {color: #45cf5e;}
+.cm-s-altShift .cm-attribute   {color: #45cf5e;}
+.cm-s-altShift .cm-link 	      {color: #ed8d47;}
+
+.doctype-css .cm-s-altShift .cm-atom    {color: #FFC600;}
+.doctype-css .cm-s-altShift .cm-property    {color: #b2cfff;}
+    
+    .cm-s-altShift .CodeMirror-selected { 
+        background: rgba(119, 119, 119, 0.57) !important;
+    }
+
+    .cm-s-altShift .cm-matchhighlight {
+        background: rgba(255, 255, 255, 0.67);
+        color:#2c2c2c!important;
+        border-radius:0px;
+    
+    }
+
+
+    .cm-s-altShift .CodeMirror-matchingtag {
+        color: #4bd164 !important;
+        text-decoration:underline;
+        
+    }
+    
+    .cm-s-altShift span.CodeMirror-searching {
+        background: #4bd278;
+        color:#2c2c2c !important;
+        border-radius:0px;
+    }
+    
+    
+    .cm-s-altShift .cm-matchhighlight.CodeMirror-searching.CodeMirror-selectedtext {
+        background: #ed8d47 ;
+        color:#2c2c2c !important;
+        border-radius:0px;
+    }
+
+   
+    .cm-s-altShift span.CodeMirror-matchingbracket {
+        color: #f7c741 !important;
+        background: rgba(255, 255, 255, 0.17);
+		border-radius: 5px;
+        font-weight: bolder;
+		font-size :25px;
+        backface-visibility: hidden;
+    
+    }
+    
+    .cm-s-altShift span.CodeMirror-nonmatchingbracket {
+        color: #f7c741 !important;
+        backface-visibility: hidden;
+    }
+ 
+    
+    .cm-s-altShift div.CodeMirror-cursor ,
+    .cm-s-altShift div.CodeMirror-secondarycursor {
+        border-left: 2px solid #ff8833;
+        z-index:5;
+    }
+
+
+.altShift #status-bar {                                    
+    border-top:1px solid #484b4d;
+    background:#3c3f41;
+
+}
+
+.altShift #status-bar #status-info {
+    color:#f7c741;
+
+}
+
+.altShift #status-bar #status-indicators{
+    background:#3c3f41;
+
+}
+
+.altShift #status-bar #status-indicators #status-language {
+    color:#ed8d47;
+}
+
+/* Toolbar */
+.altShift .toolbar {
+    background-color:grey;
+}
+
+.altShift .toolbar .title {
+    display:inline;
+	overflow:hidden;
+    font-size: 13px;    
+    font-weight: bold;
+    color:white;
+}
+
+.altShift .toolbar .nav .dropdown-toggle, .context-menu .dropdown-toggle, .altShift .codehint-menu .dropdown-toggle {
+	font-weight: 500;
+    color: white;
+}
+
+/* Hover menu item */
+.altShift .toolbar .nav .dropdown-menu li a:hover, .altShift .context-menu .dropdown-menu li a:hover, .altShift .codehint-menu .dropdown-menu li a:hover, .altShift .toolbar .nav .dropdown-menu li a.highlight, .altShift .context-menu .dropdown-menu li a.highlight, .altShift .codehint-menu .dropdown-menu li a.highlight,
+.altShift .toolbar .nav .dropdown-toggle:hover,.altShift .context-menu .dropdown-toggle:hover,.altShift .codehint-menu .dropdown-toggle:hover,.altShift .toolbar .nav .dropdown.open .dropdown-toggle,.altShift .context-menu .dropdown.open .dropdown-toggle,.altShift .codehint-menu .dropdown.open .dropdown-toggle {
+	color: white;
+	background: #313131;
+    border: 0px;
+}
+
+/* Menu item */
+.altShift .toolbar .nav .dropdown-menu li a, .context-menu .dropdown-menu li a,.altShift .codehint-menu .dropdown-menu li a {
+	color: white;
+}
+
+/* Disabled menu item */
+.altShift .toolbar .nav .dropdown-menu li a.disabled, .altShift .context-menu .dropdown-menu li a.disabled, .altShift .codehint-menu .dropdown-menu li a.disabled {
+    color: #525252;
+}
+.altShift .toolbar .nav .dropdown-menu li a.disabled:hover, .altShift .context-menu .dropdown-menu li a.disabled:hover, .altShift .codehint-menu .dropdown-menu li a.disabled:hover {
+    background: none;
+}
+
+
+.altShift #status-bar #status-indicators #status-indent {
+    color:#4bd278;
+}
+         
+.altShift .toolbar .nav .dropdown-menu, .context-menu .dropdown-menu,.altShift .codehint-menu .dropdown-menu {
+	background-color:grey;
+	color:white;
+}
+
+.altShift .inline-widget .CodeMirror-gutter {
+    background: #242424 !important;
+
+}
+
+.altShift .inline-editor-header{	
+    box-shadow: inset 0 0 5px #1f1f1f;
+    background:#242424;
+    height:30px;
+    width:100%;
+}
+
+
+.altShift .inline-editor-header a.filename span.line-number{	
+    color:#fff !important;
+}
+
+
+.altShift .inline-editor-header a.filename {	
+    color:#f8cb4f !important;
+}
+
+
+
+
+
+
+

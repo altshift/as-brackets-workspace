@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+    <!-- Parse error: missing ">" --> <channel
+        <title>Признанный мастер чинпоко, а-ай ^_^</title>
+        <link>http://lexa.cutenews.ru/</link>
+        <language>ru</language>
+            <item>
+                <title><![CDATA[
+                    Компиляй
+                ]]></title>
+                <description><![CDATA[
+                    <p>Запилил модуль <a href="https://github.com/lexazloy/compilyai/">Compilyai</a> (тут есть подобие документации, а качать лучше из <a href="https://brackets-registry.aboutweb.com/">репозитория</a>) для <a href="http://brackets.io/">Brackets</a>. Отличный редактор, кстати. После сохранения, указанные в package.json секции compilyai js- и less-файлы собираются через LESS и Browserify, соответственно. Сжиматель поддерживается - стандартный для LESS и через UglifyJS для яваскрипта.</p>
+                ]]></description>
+                <pubDate>2013-10-01 04:27:02</pubDate>
+                <author>Лёха zloy и красивый</author>
+                <guid ispermalink="true">http://lexa.cutenews.ru/post/1035/</guid>
+                <link>http://lexa.cutenews.ru/post/1035/</link>
+                <category>Мастерю</category>
+            </item>
+    </channel>
+</rss>

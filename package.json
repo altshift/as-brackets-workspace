@@ -1,0 +1,14 @@
+{
+    "name": "as-workspace",
+    "title": "as-workspace",
+    "version": "0.0.0",
+    "description": "All the tool we need at Alternative Shift",
+    "homepage": "",
+    "author": "",
+    "license": "MIT",
+    "categories":"",
+    "keywords": [],
+    "engines": {
+        "brackets": ">=0.35.0"
+    }
+}

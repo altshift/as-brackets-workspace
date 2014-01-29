@@ -1,13 +1,13 @@
 {
-    "name": "as-workspace",
+    "name": "altshift.as-brackets-workspace",
     "title": "as-workspace",
-    "version": "0.0.0",
-    "description": "All the tool we need at Alternative Shift",
-    "homepage": "",
-    "author": "",
+    "version": "0.0.1",
+    "description": "Ember Handlebars compiler. Source beautifier. Jslint inline. Dark theme. All the tool we need at Alternative Shift",
+    "homepage": "https://github.com/altshift/as-brackets-workspace",
+    "author": "narf vincent.noel@altshift.fr (https://github.com/narf)",
     "license": "MIT",
     "categories":"",
-    "keywords": [],
+    "keywords": ["handlebars", "Ember", "beautify", "jslint", "theme", "dark"],
     "engines": {
         "brackets": ">=0.35.0"
     }

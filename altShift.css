@@ -113,8 +113,6 @@
 .cm-s-altShift .cm-variable    {
 	color: #79ABFF; border-radius: 5px;
 	background-color: rgba(139, 139, 139, 0.28);
-	padding-left: 1px;
-	padding-right: 1px
 }
 .cm-s-altShift .cm-variable-2  {color: #79ABFF;}
 .cm-s-altShift .cm-variable-3  {color: #79ABFF;}
@@ -169,13 +167,10 @@
 
    
     .cm-s-altShift span.CodeMirror-matchingbracket {
-        color: #f7c741 !important;
-        background: rgba(255, 255, 255, 0.17);
-		border-radius: 5px;
+        background: rgba(255, 180, 47, 1);
+        border-radius: 2px;
         font-weight: bolder;
-		font-size :25px;
-        backface-visibility: hidden;
-    
+        color: black!important;
     }
     
     .cm-s-altShift span.CodeMirror-nonmatchingbracket {

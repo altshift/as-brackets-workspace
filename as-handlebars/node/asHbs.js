@@ -10,7 +10,7 @@ function hbsCompile($filePath) {
     var outputPath;
     outputPath = $filePath.replace(".hbs", ".html.js");
 
-    exec(__dirname + "/node_modules/handlebars/bin/handlebars " + $filePath + " -f " + outputPath + " -e hbs -o false -r -h dep/ -d false -a");
+    exec(__dirname + "/node_modules/ember-precompile/bin/ember-precompile " + $filePath + " -f " + outputPath);
 }
 
 /**

@@ -21,6 +21,7 @@ exports.init = function(manager){
 ////////////////////////////////////////////////////////////////////////////////
 
 function commander(exec, cb){
+    console.log(exec)
     child_process.exec(exec, function(err, stdout, stderr){
         cb(null, stderr + stdout);
     });

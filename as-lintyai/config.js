@@ -5,54 +5,54 @@ define(function (require, exports) {
     "use strict";
     ////////////////////////////////////////////////////////////////////////////////
 
-    //// http://jshint.com/
-    //exports.javascript = {};
-    //exports.javascript.cmd = 'node "%s/jshint/bin/jshint"';
-    //exports.javascript.re = function(data){
-    //    var result = [];
-    //
-    //    data.split('\n').forEach(function(element){
-    //        var match;
-    //
-    //        element += '\n';
-    //        match = /^(.+): line (\d+), col (\d+), /.exec(element);
-    //
-    //        match && result.push({
-    //            line: match[2],
-    //            message: element.replace(match[0], '')
-    //        });
-    //    });
-    //
-    //    return result;
-    //};
-    //exports.javascript.type = {};
-    //exports.javascript.type.warning = /(Missing\s|Unnecessary\s)/;
-    //exports.javascript.type.notice = /\sbut never used/;
-
-    // Call jslint
+    // http://jshint.com/
     exports.javascript = {};
-    exports.javascript.cmd = 'node "%s/jslint/bin/jslint"';
+    exports.javascript.cmd = 'node "%s/jshint/bin/jshint"';
     exports.javascript.re = function (data) {
         var result = [];
 
-        data.split(/\n( *)#/).forEach(function (element) {
+        data.split('\n').forEach(function (element) {
             var match;
 
-            element = '#' + element;
-            match = /\/\/ Line (\d+), Pos (\d+)/.exec(element);
-            if (match) {
-                result.push({
-                    line: parseInt(match[1], 10),
-                    message: element.replace(match[0], '')
-                });
-            }
+            element += '\n';
+            match = /^(.+): line (\d+), col (\d+), /.exec(element);
+
+            match && result.push({
+                line: match[2],
+                message: element.replace(match[0], '')
+            });
         });
 
         return result;
     };
     exports.javascript.type = {};
-    exports.javascript.type.warning = /^#(\d*) (Missing\s|Unnecessary\s|Unused)/;
-    exports.javascript.type.notice = /^#(\d*) Expected '.*' at column/;
+    exports.javascript.type.warning = /(Missing\s|Unnecessary\s)/;
+    exports.javascript.type.notice = /\sbut never used/;
+
+    // Call jslint
+    //    exports.javascript = {};
+    //    exports.javascript.cmd = 'node "%s/jslint/bin/jslint"';
+    //    exports.javascript.re = function (data) {
+    //        var result = [];
+    //
+    //        data.split(/\n( *)#/).forEach(function (element) {
+    //            var match;
+    //
+    //            element = '#' + element;
+    //            match = /\/\/ Line (\d+), Pos (\d+)/.exec(element);
+    //            if (match) {
+    //                result.push({
+    //                    line: parseInt(match[1], 10),
+    //                    message: element.replace(match[0], '')
+    //                });
+    //            }
+    //        });
+    //
+    //        return result;
+    //    };
+    //    exports.javascript.type = {};
+    //    exports.javascript.type.warning = /^#(\d*) (Missing\s|Unnecessary\s|Unused)/;
+    //    exports.javascript.type.notice = /^#(\d*) Expected '.*' at column/;
 
     ////////////////////////////////////////////////////////////////////////////////
 

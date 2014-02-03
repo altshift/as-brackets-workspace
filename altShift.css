@@ -1,5 +1,13 @@
 /* original by @DiegoAlvarezA */
 
+
+
+/* No file bg */
+.altShift #editor-holder #not-editor {
+    background: rgb(95, 95, 95)
+}
+
+
 .altShift #main-toolbar {
 	background: #3c3f41;
 }
@@ -24,11 +32,38 @@
 }
 .altShift #sidebar #open-files-container ul li a span.extension,
 .altShift #sidebar #project-files-container ul li a span.extension {
-	color: #fce8b1;
-	font-weight: bold;
+	color: #FFF9E7;
+	font-weight: 500;
 }
+.altShift #sidebar #project-files-container ul .jstree-icon:before {
+    content: "\25B6 ";
+    color: #f8cb4f;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: all 0.05s;
+    display: inline-block;
+}
+.altShift #sidebar #project-files-container ul .jstree-open > .jstree-icon:before {
+    -webkit-transform: rotate(90deg);
+}
+.altShift .jstree-brackets .jstree-no-dots .jstree-open>ins {
+    -webkit-transform: none;
+}
+.altShift #sidebar #project-files-container ul .jstree-icon {
+    background: none;
+}
+.altShift #sidebar #project-files-container ul .jstree-leaf > .jstree-icon {
+    display: none;
+}
+
+/* Directories are white */
+.altShift #sidebar #project-files-container ul li.jstree-open > a,
+.altShift #sidebar #project-files-container ul li.jstree-closed > a {
+    color: #FFECB8;
+}
+/* files are grey */
 .altShift #sidebar #project-files-container ul li a {
-	color: #fff;
+	color: #CFC8B4;
 	-webkit-transition: all 0.1s ease-in-out;
 }
 .altShift #sidebar #project-files-container ul .jstree-open > a {
@@ -42,6 +77,11 @@
 	color: #f8cb4f;
 	-webkit-transform: translateX(5px);
 }
+
+.altShift .sidebar-selection {
+    transition: all 0.3s ease-in-out;
+}
+    
 /*FONT SIZE*/
 .altShift .CodeMirror {
 	font-size: 14px !important;

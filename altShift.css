@@ -113,11 +113,11 @@
 }
 .cm-s-altShift .CodeMirror-vscrollbar::-webkit-scrollbar-track,
 .cm-s-altShift .CodeMirror-hscrollbar::-webkit-scrollbar-track {
-	background: transparent;
+	background: rgb(0, 0, 0);
 }
 .cm-s-altShift .CodeMirror-vscrollbar::-webkit-scrollbar-thumb,
 .cm-s-altShift .CodeMirror-hscrollbar::-webkit-scrollbar-thumb {
-	background: #3c3f41;
+	background: #808080;
 }
 .cm-s-altShift .CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover,
 .cm-s-altShift .CodeMirror-hscrollbar::-webkit-scrollbar-thumb:hover {
@@ -167,7 +167,7 @@
 .cm-s-altShift .cm-string-2 {
 	color: #FFC600;
 }
-.cm-s-altShift .cm-def {
+  .cm-def {
 	color: #b2cfff;
 }
 .cm-s-altShift .cm-meta {
@@ -198,10 +198,10 @@
 	color: #b2cfff;
 }
 .cm-s-altShift .CodeMirror-selected {
-	background: rgba(119, 119, 119, 0.57) !important;
+	background: rgba(92, 92, 92, 1) !important;
 }
 .cm-s-altShift .cm-matchhighlight {
-	background: rgba(255, 255, 255, 0.67);
+	background: rgba(71, 255, 0, 0.71);
 	color: #2c2c2c!important;
 	border-radius: 0px;
 }
@@ -210,9 +210,8 @@
 	text-decoration: underline;
 }
 .cm-s-altShift span.CodeMirror-searching {
-	background: #4bd278;
-	color: #2c2c2c !important;
-	border-radius: 0px;
+	background: rgba(255, 255, 255, 0.14) !important;
+    color: rgb(255, 255, 255) !important;
 }
 .cm-s-altShift .cm-matchhighlight.CodeMirror-searching.CodeMirror-selectedtext {
 	background: #ed8d47;

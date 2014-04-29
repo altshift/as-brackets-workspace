@@ -2,7 +2,7 @@
 /*global define, $, brackets, window */
 
 define(function (require, exports, module) {
-    "use strict";
+    "use strict"
 
     require("./as-beautify/main");
     require("./as-lintyai/main");

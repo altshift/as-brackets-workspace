@@ -1,15 +1,19 @@
-.lintyai-gutter {
-    width: 40px;
+.CodeMirror-gutter.lintyai-gutter {
+    
+}
+
+.CodeMirror-gutter-elt .lintyai-gutter {
+    width: 20px;
     color: #fff;
-    background: #cc3333;
     text-align: right;
     padding-right: 5px;
+    margin-left: -28px;
 }
-.lintyai-gutter.problem_type_warning,
-.lintyai-gutter.warning {
+.CodeMirror-gutter-elt .lintyai-gutter.problem_type_warning,
+.CodeMirror-gutter-elt .lintyai-gutter.warning {
     background: #ff9933;
 }
-.lintyai-gutter.notice {
+.CodeMirror-gutter-elt .lintyai-gutter.notice {
     background: #ffcc66;
 }
 .lintyai-line-widget {

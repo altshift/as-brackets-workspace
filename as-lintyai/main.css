@@ -8,6 +8,7 @@
     text-align: right;
     padding-right: 5px;
     margin-left: -28px;
+    background: #CC3333;
 }
 .CodeMirror-gutter-elt .lintyai-gutter.problem_type_warning,
 .CodeMirror-gutter-elt .lintyai-gutter.warning {

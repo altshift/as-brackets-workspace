@@ -15,6 +15,11 @@ define(function (require, exports, module) {
     var _configFileName = ".csslintrc",
         config = {};
 
+    // Disable some rules
+    config.options = {
+        "adjoining-classes": 0
+    };
+
     function cssLinter(text, fullPath) {
         var results;
 

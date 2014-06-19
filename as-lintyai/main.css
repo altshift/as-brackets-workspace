@@ -1,7 +1,3 @@
-.CodeMirror-gutter.lintyai-gutter {
-    
-}
-
 .CodeMirror-gutter-elt .lintyai-gutter {
     width: 20px;
     color: #fff;
@@ -13,6 +9,7 @@
 .CodeMirror-gutter-elt .lintyai-gutter.problem_type_warning,
 .CodeMirror-gutter-elt .lintyai-gutter.warning {
     background: #ff9933;
+    color: black;
 }
 .CodeMirror-gutter-elt .lintyai-gutter.notice {
     background: #ffcc66;

@@ -8,16 +8,16 @@ define(function (require, exports, module) {
     require("./as-lintyai/main");
     require("./as-handlebars/main");
 
-    $("body").addClass("altShift");
-    CodeMirror.defaults.theme = "altShift";
+    //$("body").addClass("altShift");
+    //CodeMirror.defaults.theme = "altShift";
     //$(ExtensionUtils).trigger("Themes.themeChanged", ["altShift"]);
     //CodeMirror.refresh();
     
     var ext_utils = brackets.getModule('utils/ExtensionUtils'),
         EditorManager       = brackets.getModule("editor/EditorManager");
 
-    ext_utils.loadStyleSheet(module, 'reset.css');
-    ext_utils.loadStyleSheet(module, 'altShift.css');
+    //ext_utils.loadStyleSheet(module, 'reset.css');
+    //ext_utils.loadStyleSheet(module, 'altShift.css');
 
     var prevMode;
     $(EditorManager).on("activeEditorChange", function () {

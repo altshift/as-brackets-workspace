@@ -1,11 +1,11 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
-/*global define, $, brackets, window */
+/*global define, $, brackets */
 
 define(function (require, exports, module) {
     "use strict";
 
     require("./as-beautify/main");
-    require("./as-lintyai/main");
+    //require("./as-lintyai/main");
     require("./as-handlebars/main");
 
     //$("body").addClass("altShift");
@@ -13,7 +13,7 @@ define(function (require, exports, module) {
     //$(ExtensionUtils).trigger("Themes.themeChanged", ["altShift"]);
     //CodeMirror.refresh();
     
-    var ext_utils = brackets.getModule('utils/ExtensionUtils'),
+    var //ext_utils = brackets.getModule('utils/ExtensionUtils'),
         EditorManager       = brackets.getModule("editor/EditorManager");
 
     //ext_utils.loadStyleSheet(module, 'reset.css');

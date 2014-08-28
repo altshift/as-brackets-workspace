@@ -1,4 +1,4 @@
 {
     "node": true,
-    "predef": ["define", 'brackets', '$', 'window', 'JSHINT']
+    "predef": ["define", "brackets", "$", "window", "JSHINT"]
 }

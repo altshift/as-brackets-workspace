@@ -162,7 +162,12 @@ define(function (require, exports, module) {
                             if ($error) {
                                 configs[path] = false;
                             } else {
-                                configs[path] = JSON.parse($content);
+                                try {
+                                    configs[path] = JSON.parse($content);
+                                } catch ($$error) {
+                                    configs[path] = false;
+                                    console.error("Parsing error for file:" + path);
+                                }
                             }
                             readCount -= 1;
 

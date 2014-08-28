@@ -1,5 +1,4 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4 */
-/*global define, $, brackets, window, js_beautify, style_html, css_beautify, localStorage */
 
 define(function (require, exports, module) {
     "use strict";
@@ -33,27 +32,49 @@ define(function (require, exports, module) {
             }
 
             $.each($scanner.fileType, function ($index, $fileType) {
+                if ($scanner.scan) {
+                    CodeInspection.register($fileType, {
+                        name: $scanner.name,
+                        scanFile: function ($fileContent, $path) {
+                            var result = $scanner.scan($fileContent, $path);
 
-                CodeInspection.register($fileType, {
-                    name: $scanner.name,
-                    scanFile: function ($fileContent, $path) {
-                        var result = $scanner.scan($fileContent, $path);
+                            registry[$path] = registry[$path] || {
+                                cm: null,
+                                data: null,
+                                errorsByLine: {}
+                            };
+                            currentFileDesc = registry[$path];
 
-                        registry[$path] = registry[$path] || {
-                            cm: null,
-                            data: null,
-                            errorsByLine: {}
-                        };
-                        currentFileDesc = registry[$path];
+                            currentFileDesc.dataIsNew = true;
+                            currentFileDesc.data = result && result.errors;
 
-                        currentFileDesc.dataIsNew = true;
-                        currentFileDesc.data = result && result.errors;
+                            showScanOnGutter(currentFileDesc.data, $path);
+                            return result;
+                        }
+                    });
+                } else {
+                    CodeInspection.register($fileType, {
+                        name: $scanner.name,
+                        scanFileAsync: function ($fileContent, $path) {
+                            var result = $scanner.scanAsync($fileContent, $path);
 
-                        showScanOnGutter(currentFileDesc.data, $path);
+                            return result.then(function ($results) {
+                                registry[$path] = registry[$path] || {
+                                    cm: null,
+                                    data: null,
+                                    errorsByLine: {}
+                                };
+                                currentFileDesc = registry[$path];
 
-                        return result;
-                    }
-                });
+                                currentFileDesc.dataIsNew = true;
+                                currentFileDesc.data = $results && $results.errors;
+
+                                showScanOnGutter(currentFileDesc.data, $path);
+                                return $results;
+                            });
+                        }
+                    });
+                }
             });
         });
 
@@ -99,7 +120,7 @@ define(function (require, exports, module) {
                 // For every errors
                 $.each($scanResult, function ($index, $oneResult) {
                     var line = $oneResult.pos.line;
-                    
+
                     // Add line marker only once
                     if (!currentFileDesc.errorsByLine[line]) {
                         currentFileDesc.cm.setGutterMarker(

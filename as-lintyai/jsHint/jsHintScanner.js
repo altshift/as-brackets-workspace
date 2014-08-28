@@ -5,7 +5,7 @@
  */
 
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
-/*global define, brackets, $, window, JSHINT*/
+
 define(function (require, exports, module) {
     "use strict";
 
@@ -14,6 +14,7 @@ define(function (require, exports, module) {
         FileSystem = brackets.getModule("filesystem/FileSystem"),
         ProjectManager = brackets.getModule("project/ProjectManager"),
         DocumentManager = brackets.getModule("document/DocumentManager"),
+        configs = {},
         defaultConfig = {
             "options": {
                 "undef": true
@@ -30,50 +31,56 @@ define(function (require, exports, module) {
      */
     var _configFileName = ".jshintrc";
 
-    function handleHinter(text, fullPath) {
-        var resultJH = JSHINT(text, config.options, config.globals);
+    function handleHinter(text, fullPath, $callback) {
+        var response = new $.Deferred();
 
-        if (!resultJH) {
-            var errors = JSHINT.errors,
-                result = {
-                    errors: []
-                },
-                i,
-                len;
-            for (i = 0, len = errors.length; i < len; i++) {
-                var messageOb = errors[i],
-                    //default
-                    type = CodeInspection.Type.ERROR;
+        loadConfigForFile(fullPath, function ($error, $config) {
+            var resultJH = JSHINT(text, $config, config.globals);
 
-                // encountered an issue when jshint returned a null err
-                if (messageOb) {
-                    var message;
-                    if (messageOb.type !== undefined) {
-                        // default is ERROR, override only if it differs
-                        if (messageOb.type === "warning") {
-                            type = CodeInspection.Type.WARNING;
+            if (!resultJH) {
+                var errors = JSHINT.errors,
+                    result = {
+                        errors: []
+                    },
+                    i,
+                    len;
+                for (i = 0, len = errors.length; i < len; i++) {
+                    var messageOb = errors[i],
+                        //default
+                        type = CodeInspection.Type.ERROR;
+
+                    // encountered an issue when jshint returned a null err
+                    if (messageOb) {
+                        var message;
+                        if (messageOb.type !== undefined) {
+                            // default is ERROR, override only if it differs
+                            if (messageOb.type === "warning") {
+                                type = CodeInspection.Type.WARNING;
+                            }
                         }
-                    }
 
-                    message = messageOb.reason;
-                    if (messageOb.code) {
-                        message += " (" + messageOb.code + ")";
-                    }
+                        message = messageOb.reason;
+                        if (messageOb.code) {
+                            message += " (" + messageOb.code + ")";
+                        }
 
-                    result.errors.push({
-                        pos: {
-                            line: messageOb.line - 1,
-                            ch: messageOb.character
-                        },
-                        message: message,
-                        type: type
-                    });
+                        result.errors.push({
+                            pos: {
+                                line: messageOb.line - 1,
+                                ch: messageOb.character
+                            },
+                            message: message,
+                            type: type
+                        });
+                    }
                 }
+                response.resolve(result);
+            } else {
+                response.resolve(null);
             }
-            return result;
-        } else {
-            return null;
-        }
+        });
+
+        return response.promise();
     }
 
     /**
@@ -119,6 +126,67 @@ define(function (require, exports, module) {
         return result.promise();
     }
 
+    function loadConfigForFile($path, $callback) {
+        var file, pathItems, path,
+            readCount = 0,
+            config = {};
+
+        function endProcess() {
+            var attName;
+            pathItems = $path.split("/");
+            while (pathItems.length > 1) {
+                pathItems.length -= 1;
+                path = pathItems.join("/") + "/.jshintrc";
+                if (configs[path]) {
+                    for (attName in configs[path]) {
+                        if (configs[path].hasOwnProperty(attName) && !config[attName]) {
+                            config[attName] = configs[path][attName];
+                        }
+                    }
+                }
+            }
+            $callback({errors: []}, config);
+        }
+
+        pathItems = $path.split("/");
+        while (pathItems.length > 1) {
+            pathItems.length -= 1;
+            (function () {
+                var path = pathItems.join("/") + "/.jshintrc";
+                readCount += 1;
+                if (configs[path] === undefined) {
+                    try {
+                        file = FileSystem.getFileForPath(pathItems.join("/") + "/.jshintrc");
+                        file.read(function ($error, $content) {
+                            $callback("read");
+                            if ($error) {
+                                configs[path] = false;
+                            } else {
+                                configs[path] = JSON.parse($content);
+                            }
+                            readCount -= 1;
+
+                            if (readCount === 0) {
+                                endProcess();
+                            }
+                        });
+                    } catch ($error) {
+                        configs[path] = false;
+                        readCount -= 1;
+                        if (readCount === 0) {
+                            endProcess();
+                        }
+                    }
+                } else {
+                    readCount -= 1;
+                    if (readCount === 0) {
+                        endProcess();
+                    }
+                }
+            }());
+        }
+    }
+
     /**
      * Attempts to load project configuration file.
      */
@@ -150,26 +218,30 @@ define(function (require, exports, module) {
         //            name: "JSHint",
         //            scanFile: handleHinter
         //        });
-        
 
-//        $(DocumentManager)
-//            .on("documentSaved.jshint documentRefreshed.jshint", function (e, document) {
-//                // if this project's JSHint config has been updated, reload
-//                if (document.file.fullPath ===
-//                    ProjectManager.getProjectRoot().fullPath + _configFileName) {
-//                    tryLoadConfig();
-//                }
-//            });
-//
-//        $(ProjectManager)
-//            .on("projectOpen.jshint", function () {
-//                tryLoadConfig();
-//            });
-//
-//        tryLoadConfig();
+        //        $(DocumentManager)
+        //            .on("documentSaved.jshint documentRefreshed.jshint", function (e, document) {
+        //                // if this project's JSHint config has been updated, reload
+        //                if (document.file.fullPath ===
+        //                    ProjectManager.getProjectRoot().fullPath + _configFileName) {
+        //                    tryLoadConfig();
+        //                }
+        //            });
+        //
+        //        $(ProjectManager)
+        //            .on("projectOpen.jshint", function () {
+        //                tryLoadConfig();
+        //            });
+        //
+        //        tryLoadConfig();
     });
 
-    exports.scan = handleHinter;
+//    exports.scanAsync = function () {
+//        var response = new $.Deferred();
+//            response.resolve(null);
+//        return response.promise();
+//    };
+    exports.scanAsync = handleHinter;
     exports.fileType = "javascript";
     exports.name = "jsHint";
 

@@ -14,7 +14,7 @@ define(function (require, exports, module) {
     //CodeMirror.refresh();
     
     var //ext_utils = brackets.getModule('utils/ExtensionUtils'),
-        EditorManager = brackets.getModule("editor/EditorManager");
+        EditorManager = brackets.getModule("editor/EditorManager")
 
     //ext_utils.loadStyleSheet(module, 'reset.css');
     //ext_utils.loadStyleSheet(module, 'altShift.css');

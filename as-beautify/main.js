@@ -5,7 +5,7 @@ define(function (require, exports, module) {
 
     "use strict";
 
-    var CommandManager =brackets.getModule("command/CommandManager"),
+    var CommandManager = brackets.getModule("command/CommandManager"),
         Commands = brackets.getModule('command/Commands'),
         EditorManager = brackets.getModule("editor/EditorManager"),
         Editor = brackets.getModule("editor/Editor").Editor,
@@ -13,7 +13,7 @@ define(function (require, exports, module) {
         PreferencesManager = brackets.getModule('preferences/PreferencesManager'),
         Menus = brackets.getModule("command/Menus"),
         COMMAND_TIMESTAMP = "me.drewh.jsbeautify.timeStamp",
-        COMMAND_SAVE_ID = "me.drewh.jsbeautify-autosave", 
+        COMMAND_SAVE_ID = "me.drewh.jsbeautify-autosave",
         COMMAND_ID = "me.drewh.jsbeautify";
 
     var js_beautify = require('./beautify');
@@ -40,7 +40,6 @@ define(function (require, exports, module) {
 
         return formattedText;
     }
-
 
     /**
      *
@@ -83,7 +82,6 @@ define(function (require, exports, module) {
      */
 
     function format(autoSave) {
-
         var indentChar, indentSize, formattedText;
         var unformattedText, isSelection = false;
         var useTabs = Editor.getUseTabChar();
@@ -185,14 +183,15 @@ define(function (require, exports, module) {
         if (this.getChecked()) localStorage.setItem(COMMAND_TIMESTAMP, 0);
     });
 
-    var menu = Menus.getMenu(Menus.AppMenuBar.EDIT_MENU);
+    var menu =
+        Menus.getMenu(Menus.AppMenuBar.EDIT_MENU);
 
     var windowsCommand = {
-        key: "Ctrl-B",
+        key: "alt-B",
         platform: "win"
     };
     var macCommand = {
-        key: "Cmd-B",
+        key: "cmd-b",
         platform: "mac"
     };
 

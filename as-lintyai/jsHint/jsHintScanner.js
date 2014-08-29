@@ -4,7 +4,6 @@
  * See the file LICENSE for copying permission.
  */
 
-/*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
 
 define(function (require, exports, module) {
     "use strict";
@@ -145,7 +144,9 @@ define(function (require, exports, module) {
                     }
                 }
             }
-            $callback({errors: []}, config);
+            $callback({
+                errors: []
+            }, config);
         }
 
         pathItems = $path.split("/");
@@ -163,8 +164,9 @@ define(function (require, exports, module) {
                                 configs[path] = false;
                             } else {
                                 try {
-                                    configs[path] = JSON.parse($content);
+                                    eval("configs[path]  = " + $content);
                                 } catch ($$error) {
+                                    console.log($$error.stack)
                                     configs[path] = false;
                                     console.error("Parsing error for file:" + path);
                                 }
@@ -241,11 +243,11 @@ define(function (require, exports, module) {
         //        tryLoadConfig();
     });
 
-//    exports.scanAsync = function () {
-//        var response = new $.Deferred();
-//            response.resolve(null);
-//        return response.promise();
-//    };
+    //    exports.scanAsync = function () {
+    //        var response = new $.Deferred();
+    //            response.resolve(null);
+    //        return response.promise();
+    //    };
     exports.scanAsync = handleHinter;
     exports.fileType = "javascript";
     exports.name = "jsHint";

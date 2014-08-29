@@ -32,7 +32,6 @@ define(function (require, exports, module) {
 
     function handleHinter(text, fullPath, $callback) {
         var response = new $.Deferred();
-
         loadConfigForFile(fullPath, function ($error, $config) {
             var resultJH = JSHINT(text, $config, config.globals);
 
@@ -159,20 +158,18 @@ define(function (require, exports, module) {
                     try {
                         file = FileSystem.getFileForPath(pathItems.join("/") + "/.jshintrc");
                         file.read(function ($error, $content) {
-                            $callback("read");
                             if ($error) {
                                 configs[path] = false;
                             } else {
                                 try {
                                     eval("configs[path]  = " + $content);
                                 } catch ($$error) {
-                                    console.log($$error.stack)
                                     configs[path] = false;
                                     console.error("Parsing error for file:" + path);
+                                    console.error($$error.stack);
                                 }
                             }
                             readCount -= 1;
-
                             if (readCount === 0) {
                                 endProcess();
                             }

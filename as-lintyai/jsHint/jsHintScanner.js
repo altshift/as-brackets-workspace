@@ -4,7 +4,6 @@
  * See the file LICENSE for copying permission.
  */
 
-
 define(function (require, exports, module) {
     "use strict";
 
@@ -13,43 +12,38 @@ define(function (require, exports, module) {
         FileSystem = brackets.getModule("filesystem/FileSystem"),
         ProjectManager = brackets.getModule("project/ProjectManager"),
         DocumentManager = brackets.getModule("document/DocumentManager"),
-        configs = {},
-        defaultConfig = {
-            "options": {
-                "undef": true
-            },
-            "globals": {}
-        },
-        config = defaultConfig;
+        JscsStringChecker = require("./jscs-browser"),
+        configCache = {
+            ".jscsrc": {
+                "/.jscsrc": {
+                    preset: "crockford",
+                    validateQuoteMarks: "\"",
+                    disallowDanglingUnderscores: null
+                }
+            }
+        };
 
     require("./jshint");
 
-    /**
-     * @private
-     * @type {string}
-     */
-    var _configFileName = ".jshintrc";
-
     function handleHinter(text, fullPath, $callback) {
-        var response = new $.Deferred();
-        loadConfigForFile(fullPath, function ($error, $config) {
-            var resultJH = JSHINT(text, $config, config.globals);
+        var jsHintPromise, jscsPromise,
+            response = new $.Deferred();
 
+        jsHintPromise = loadConfigForFile(fullPath, ".jshintrc").then(function ($config) {
+            var i, len, messageOb, type, message,
+                errors = [],
+                resultJH = JSHINT(text, $config),
+                jsHintErrors = JSHINT.errors;
+
+            //console.log("jsHintPromise", $config, resultJH)
             if (!resultJH) {
-                var errors = JSHINT.errors,
-                    result = {
-                        errors: []
-                    },
-                    i,
-                    len;
-                for (i = 0, len = errors.length; i < len; i++) {
-                    var messageOb = errors[i],
-                        //default
-                        type = CodeInspection.Type.ERROR;
+                for (i = 0, len = jsHintErrors.length; i < len; i++) {
+                    messageOb = jsHintErrors[i];
+                    //default
+                    type = CodeInspection.Type.ERROR;
 
                     // encountered an issue when jshint returned a null err
                     if (messageOb) {
-                        var message;
                         if (messageOb.type !== undefined) {
                             // default is ERROR, override only if it differs
                             if (messageOb.type === "warning") {
@@ -61,8 +55,9 @@ define(function (require, exports, module) {
                         if (messageOb.code) {
                             message += " (" + messageOb.code + ")";
                         }
+                        message += " [jsh]";
 
-                        result.errors.push({
+                        errors.push({
                             pos: {
                                 line: messageOb.line - 1,
                                 ch: messageOb.character
@@ -72,179 +67,117 @@ define(function (require, exports, module) {
                         });
                     }
                 }
-                response.resolve(result);
-            } else {
-                response.resolve(null);
             }
+
+            return errors;
         });
 
-        return response.promise();
-    }
+        jscsPromise = loadConfigForFile(fullPath, ".jscsrc").then(function ($config) {
+            var jscsErrors, checker, errList,
+                errors = [];
 
-    /**
-     * Loads project-wide JSHint configuration.
-     *
-     * JSHint project file should be located at <Project Root>/.jshintrc. It
-     * is loaded each time project is changed or the configuration file is
-     * modified.
-     *
-     * @return Promise to return JSHint configuration object.
-     *
-     * @see <a href="http://www.jshint.com/docs/options/">JSHint option
-     * reference</a>.
-     */
-    function _loadProjectConfig() {
+            checker = new JscsStringChecker();
+            checker.registerDefaultRules();
+            checker.configure($config);
 
-        var projectRootEntry = ProjectManager.getProjectRoot(),
-            result = new $.Deferred(),
-            file,
-            config;
+            jscsErrors = checker.checkString(text);
+            errList = jscsErrors.getErrorList();
 
-        file = FileSystem.getFileForPath(projectRootEntry.fullPath + _configFileName);
-        file.read(function (err, content) {
-            if (!err) {
-                var cfg = {};
-                try {
-                    config = JSON.parse(content);
-                } catch (e) {
-                    console.error("JSHint: error parsing " + file.fullPath + ". Details: " + e);
-                    result.reject(e);
-                    return;
-                }
-                cfg.globals = config.globals || {};
-                if (config.global) {
-                    delete config.globals;
-                }
-                cfg.options = config;
-                result.resolve(cfg);
-            } else {
-                result.reject(err);
-            }
+            errList.forEach(function (error) {
+                errors.push({
+                    pos: {
+                        line: error.line - 1,
+                        ch: error.column
+                    },
+                    message: error.message + " [jscs]",
+                    type: CodeInspection.Type.WARNING
+                });
+            });
+
+            return errors;
         });
-        return result.promise();
+
+        return $.when(jscsPromise, jsHintPromise).then(function ($jscsErrors, $jsHintErrors) {
+            var joinedErrors = $jscsErrors.concat($jsHintErrors);
+            return {errors: joinedErrors};
+        });
     }
 
-    function loadConfigForFile($path, $callback) {
-        var file, pathItems, path,
+    function tryGetConfigAt($path) {
+        var file,
+            config = false,
+            deferred = new $.Deferred();
+
+        try {
+            // Try to load config from file
+            file = FileSystem.getFileForPath($path);
+            file.read(function ($error, $content) {
+                if ($error) {
+                    deferred.resolve($path, false);
+                } else {
+                    try {
+                        eval("config  = " + $content);
+                        deferred.resolve($path, config);
+                    } catch ($$error) {
+                        deferred.resolve($path, false);
+                        console.error("Parsing error for file:" + path);
+                        console.error($$error.stack);
+                    }
+                }
+            });
+        } catch ($error) {
+            // Unable to get config = no config
+            deferred.resolve($path, false);
+        }
+
+        return deferred.promise();
+    }
+
+    function loadConfigForFile($path, $fileName) {
+        var file, pathItems, curPath,
             readCount = 0,
-            config = {};
+            allPromises = [],
+            myConfigCache = configCache[$fileName] = configCache[$fileName] ||  [],
+            finalConfig = {};
 
-        function endProcess() {
-            var attName;
+        // Break up path parts
+        pathItems = $path.split("/");
+
+        // For every part of path, check presence of config file
+        while (pathItems.length > 1) {
+            pathItems.length -= 1;
+
+            curPath = pathItems.join("/") + "/" + $fileName;
+            if (myConfigCache[curPath] === undefined) {
+                // Only get config if not already recovered (need refresh if any changes are made into config)
+                allPromises.push(tryGetConfigAt(curPath).done(function ($path, $config) {
+                    myConfigCache[$path] = $config;
+                }));
+            }
+        }
+
+        return $.when.apply($, allPromises).then(function () {
+            // All config files are loaded, now merge all of them into one config
+            var attName, curPath;
+
             pathItems = $path.split("/");
             while (pathItems.length > 1) {
                 pathItems.length -= 1;
-                path = pathItems.join("/") + "/.jshintrc";
-                if (configs[path]) {
-                    for (attName in configs[path]) {
-                        if (configs[path].hasOwnProperty(attName) && !config[attName]) {
-                            config[attName] = configs[path][attName];
+                curPath = pathItems.join("/") + "/" + $fileName;
+                if (myConfigCache[curPath]) {
+                    for (attName in myConfigCache[curPath]) {
+                        if (myConfigCache[curPath].hasOwnProperty(attName) && !(attName in finalConfig)) {
+                            finalConfig[attName] = myConfigCache[curPath][attName];
                         }
                     }
                 }
             }
-            $callback({
-                errors: []
-            }, config);
-        }
 
-        pathItems = $path.split("/");
-        while (pathItems.length > 1) {
-            pathItems.length -= 1;
-            (function () {
-                var path = pathItems.join("/") + "/.jshintrc";
-                readCount += 1;
-                if (configs[path] === undefined) {
-                    try {
-                        file = FileSystem.getFileForPath(pathItems.join("/") + "/.jshintrc");
-                        file.read(function ($error, $content) {
-                            if ($error) {
-                                configs[path] = false;
-                            } else {
-                                try {
-                                    eval("configs[path]  = " + $content);
-                                } catch ($$error) {
-                                    configs[path] = false;
-                                    console.error("Parsing error for file:" + path);
-                                    console.error($$error.stack);
-                                }
-                            }
-                            readCount -= 1;
-                            if (readCount === 0) {
-                                endProcess();
-                            }
-                        });
-                    } catch ($error) {
-                        configs[path] = false;
-                        readCount -= 1;
-                        if (readCount === 0) {
-                            endProcess();
-                        }
-                    }
-                } else {
-                    readCount -= 1;
-                    if (readCount === 0) {
-                        endProcess();
-                    }
-                }
-            }());
-        }
+            // Return final config
+            return finalConfig;
+        });
     }
 
-    /**
-     * Attempts to load project configuration file.
-     */
-    function tryLoadConfig() {
-        /**
-         * Makes sure JSHint is re-ran when the config is reloaded
-         *
-         * This is a workaround due to some loading issues in Sprint 31.
-         * See bug for details: https://github.com/adobe/brackets/issues/5442
-         */
-        function _refreshCodeInspection() {
-            CodeInspection.toggleEnabled();
-            CodeInspection.toggleEnabled();
-        }
-        _loadProjectConfig()
-            .done(function (newConfig) {
-                config = newConfig;
-            })
-            .fail(function () {
-                config = defaultConfig;
-            })
-            .always(function () {
-                _refreshCodeInspection();
-            });
-    }
-
-    AppInit.appReady(function () {
-        //        CodeInspection.register("javascript", {
-        //            name: "JSHint",
-        //            scanFile: handleHinter
-        //        });
-
-        //        $(DocumentManager)
-        //            .on("documentSaved.jshint documentRefreshed.jshint", function (e, document) {
-        //                // if this project's JSHint config has been updated, reload
-        //                if (document.file.fullPath ===
-        //                    ProjectManager.getProjectRoot().fullPath + _configFileName) {
-        //                    tryLoadConfig();
-        //                }
-        //            });
-        //
-        //        $(ProjectManager)
-        //            .on("projectOpen.jshint", function () {
-        //                tryLoadConfig();
-        //            });
-        //
-        //        tryLoadConfig();
-    });
-
-    //    exports.scanAsync = function () {
-    //        var response = new $.Deferred();
-    //            response.resolve(null);
-    //        return response.promise();
-    //    };
     exports.scanAsync = handleHinter;
     exports.fileType = "javascript";
     exports.name = "jsHint";

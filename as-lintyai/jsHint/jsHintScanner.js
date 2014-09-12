@@ -7,7 +7,8 @@
 define(function (require, exports, module) {
     "use strict";
 
-    var AppInit = brackets.getModule("utils/AppInit"),
+    var jscsDefaultConfig,
+        AppInit = brackets.getModule("utils/AppInit"),
         CodeInspection = brackets.getModule("language/CodeInspection"),
         FileSystem = brackets.getModule("filesystem/FileSystem"),
         ProjectManager = brackets.getModule("project/ProjectManager"),
@@ -15,13 +16,15 @@ define(function (require, exports, module) {
         JscsStringChecker = require("./jscs-browser"),
         configCache = {
             ".jscsrc": {
-                "/.jscsrc": {
-                    preset: "crockford",
-                    validateQuoteMarks: "\"",
-                    disallowDanglingUnderscores: null
-                }
+                "/.jscsrc": {}
             }
         };
+
+    jscsDefaultConfig = FileSystem.getFileForPath(require.toUrl("./jscsConfig.json")).read(function ($error, $content) {
+        var jscsDefaultConfig = JSON.parse($content);
+
+        configCache[".jscsrc"]["/.jscsrc"] = jscsDefaultConfig;
+    });
 
     require("./jshint");
 
@@ -99,7 +102,9 @@ define(function (require, exports, module) {
 
         return $.when(jscsPromise, jsHintPromise).then(function ($jscsErrors, $jsHintErrors) {
             var joinedErrors = $jscsErrors.concat($jsHintErrors);
-            return {errors: joinedErrors};
+            return {
+                errors: joinedErrors
+            };
         });
     }
 
